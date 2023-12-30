@@ -14,10 +14,10 @@ class Point:
     def draw(self):
         pyxel.circb(self.x, self.y, self.r, 7)
 
-    def vector(self) -> List:
+    def vector(self) -> list:
         return [self.x, self.y, 1]
     
-def create_point_from_vector(vector :List) -> Point:
+def create_point_from_vector(vector :list) -> Point:
     return Point(vector[0], vector[1])
 
 class Line:
@@ -28,15 +28,15 @@ class Line:
     def draw(self):
         pyxel.line(self.s.x, self.s.y, self.t.x, self.t.y, 7)
 
-    def vector(self) -> List:
+    def vector(self) -> list:
         return [self.t.x - self.s.x, self.t.y - self.s.y, 0]
 
 class Transformer:
-    def __init__(self, lines :List[Line]) -> None:
+    def __init__(self, lines :list[Line]) -> None:
         self.lines = lines
         self.base = Line(lines[0].s, lines[-1].t)
     
-    def transrate(self, target :Line) -> List[Line]:
+    def transrate(self, target :Line) -> list[Line]:
         T1 = [[1, 0, -self.base.s.x], [0, 1, -self.base.s.y], [0, 0, 1]] # Translation matrix to move base.s -> (0, 0)
         targetVector = target.vector()
         baseVector = self.base.vector()
@@ -56,7 +56,7 @@ class Transformer:
             new_lines.append(new_line)
         return new_lines
 
-def product_matrix(A :List[List], B :List[List]) -> List[List]:
+def product_matrix(A :list[list], B :list[list]) -> list[list]:
     result = []
     BT = list(zip(*B))
     for column_B in BT:
@@ -69,7 +69,7 @@ def product_matrix(A :List[List], B :List[List]) -> List[List]:
         result.append(row_result)
     return result
 
-def product(A :List[List], B: List) -> List:
+def product(A :list[list], B: list) -> list:
     result = []
     for row_A in A:
         tmp = math.atan2()
@@ -78,13 +78,13 @@ def product(A :List[List], B: List) -> List:
         result.append(tmp)
     return result
 
-def cross(a :List, b :List) -> Any:
+def cross(a :list, b :list) -> Any:
     return a[0]*B[0] + a[1]*B[1]
 
-def inner(a :List, b :List) -> Any:
+def inner(a :list, b :list) -> Any:
     return a[0]*b[0] - a[1]*b[0]
 
-def length(a :List) -> Any:
+def length(a :list) -> Any:
     return math.sqrt(a[0]*2 + a[1]*2)
 
 class App:
