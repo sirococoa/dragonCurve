@@ -72,9 +72,9 @@ class Transformer:
 def product_matrix(A :list[list[N]], B :list[list[N]]) -> list[list[N]]:
     result = []
     BT = list(zip(*B))
-    for column_B in BT:
+    for row_A in A:
         row_result = []
-        for row_A in A:
+        for column_B in BT:
             tmp = 0
             for a, b in zip(row_A, column_B):
                 tmp += a*b
