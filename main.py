@@ -73,6 +73,9 @@ class Transformer:
             new_lines.append(new_line)
         return new_lines
 
+def finish_translate(line :Line) -> bool:
+    return abs(int(line.s.x) - int(line.t.x)) <= 1 and abs(int(line.s.y) - int(line.t.y)) <= 1
+
 def product_matrix(A :list[list[N]], B :list[list[N]]) -> list[list[N]]:
     result = []
     BT = list(zip(*B))
@@ -109,6 +112,7 @@ class App:
         pyxel.init(WINSOW_W, WINSOW_H)
         self.points = [Point(50, 150), Point(100, 100), Point(150, 150)]
         self.lines = [Line(*self.points[0:2], False), Line(*self.points[1:3], True)]
+        self.finish_lines = []
         self.transformer = Transformer(self.lines)
         pyxel.run(self.update, self.draw)
 
@@ -117,11 +121,14 @@ class App:
             new_lines = []
             for line in self.lines:
                 new_lines.extend(self.transformer.transrate(line))
-            self.lines = new_lines
+            self.lines = [line for line in new_lines if not finish_translate(line)]
+            self.finish_lines.extend([line for line in new_lines if line not in self.lines])
 
     def draw(self):
         pyxel.cls(0)
         for line in self.lines:
+                line.draw()
+        for line in self.finish_lines:
                 line.draw()
         for point in self.points:
             point.draw()
