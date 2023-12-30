@@ -107,30 +107,70 @@ def cross(a :list[N], b :list[N]) -> N:
 def length(a :list[N]) -> N:
     return math.sqrt(a[0]**2 + a[1]**2)
 
+class Editor:
+    def __init__(self) -> None:
+        self.points = []
+    
+    def update(self):
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT, repeat=10):
+            self.points.append(Point(pyxel.mouse_x, pyxel.mouse_y))
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT, repeat=10):
+            if self.points:
+                self.points.pop()
+
+    def generate(self) -> tuple[list[Point], list[Line]]:
+        lines = []
+        for i, pair in enumerate(zip(self.points, self.points[1:])):
+            lines.append(Line(pair[0], pair[1], bool(i%2)))
+        return self.points, lines
+
+    def generatable(self) -> bool:
+        return len(self.points) >= 3
+    
+    def draw(self):
+        for point in self.points:
+            point.draw()
+
 class App:
     def __init__(self):
         pyxel.init(WINSOW_W, WINSOW_H)
-        self.points = [Point(50, 150), Point(100, 100), Point(150, 150)]
-        self.lines = [Line(*self.points[0:2], False), Line(*self.points[1:3], True)]
+        self.editor = Editor()
+        self.state = "Edit"
+
+        self.points = []
+        self.lines = []
         self.finish_lines = []
         self.transformer = Transformer(self.lines)
         pyxel.run(self.update, self.draw)
 
     def update(self):
-        if pyxel.btnp(pyxel.KEY_SPACE, repeat=60):
-            new_lines = []
-            for line in self.lines:
-                new_lines.extend(self.transformer.transrate(line))
-            self.lines = [line for line in new_lines if not finish_translate(line)]
-            self.finish_lines.extend([line for line in new_lines if line not in self.lines])
+        if self.state == "Edit":
+            self.editor.update()
+            if pyxel.btnp(pyxel.KEY_SPACE, repeat=60) and self.editor.generatable():
+                self.points, self.lines = self.editor.generate()
+                self.state = "Translate"
+        elif self.state == "Translate":
+            if pyxel.btnp(pyxel.KEY_SPACE, repeat=60):
+                new_lines = []
+                for line in self.lines:
+                    new_lines.extend(self.transformer.transrate(line))
+                self.lines = [line for line in new_lines if not finish_translate(line)]
+                self.finish_lines.extend([line for line in new_lines if line not in self.lines])
+        else:
+            pass
 
     def draw(self):
         pyxel.cls(0)
-        for line in self.lines:
-                line.draw()
-        for line in self.finish_lines:
-                line.draw()
-        for point in self.points:
-            point.draw()
+        if self.state == "Edit":
+            self.editor.draw()
+        elif self.state == "Translate":
+            for line in self.lines:
+                    line.draw()
+            for line in self.finish_lines:
+                    line.draw()
+            for point in self.points:
+                point.draw()
+        else:
+            pass
 
 App()
