@@ -76,7 +76,7 @@ def product_matrix(A :list[list[N]], B :list[list[N]]) -> list[list[N]]:
         row_result = []
         for row_A in A:
             tmp = 0
-            for a, b in zip(column_B, row_A):
+            for a, b in zip(row_A, column_B):
                 tmp += a*b
             row_result.append(tmp)
         result.append(row_result)
