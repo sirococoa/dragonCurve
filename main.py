@@ -74,7 +74,7 @@ class Transformer:
         return new_lines
 
 def finish_translate(line :Line) -> bool:
-    return abs(int(line.s.x) - int(line.t.x)) <= 1 and abs(int(line.s.y) - int(line.t.y)) <= 1
+    return abs(int(line.s.x) - int(line.t.x)) + abs(int(line.s.y) - int(line.t.y)) <= 1
 
 def product_matrix(A :list[list[N]], B :list[list[N]]) -> list[list[N]]:
     result = []
