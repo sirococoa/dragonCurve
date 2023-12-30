@@ -88,7 +88,7 @@ def inner(a :list[N], b :list[N]) -> N:
     return a[0]*b[0] - a[1]*b[0]
 
 def length(a :list[N]) -> N:
-    return math.sqrt(a[0]*2 + a[1]*2)
+    return math.sqrt(a[0]**2 + a[1]**2)
 
 class App:
     def __init__(self):
