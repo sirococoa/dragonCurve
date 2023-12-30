@@ -53,8 +53,8 @@ class Transformer:
         T = product_matrix(T2, product_matrix(S, product_matrix(R, T1)))
         new_lines = []
         for line in self.lines:
-            new_sv = product(T, line.s.vector)
-            new_tv = product(T, line.t.vector)
+            new_sv = product(T, line.s.vector())
+            new_tv = product(T, line.t.vector())
             new_line = Line(create_point_from_vector(new_sv), create_point_from_vector(new_tv))
             new_lines.append(new_line)
         return new_lines
