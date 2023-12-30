@@ -1,16 +1,29 @@
 import pyxel
 
+WINSOW_W = 256
+WINSOW_H = 256
+
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.r = 10
+
+    def draw(self):
+        pyxel.circb(self.x, self.y, self.r, 7)
+
 class App:
     def __init__(self):
-        pyxel.init(160, 120)
-        self.x = 0
+        pyxel.init(WINSOW_W, WINSOW_H)
+        self.points = [Point(50, 50), Point(50, 150), Point(150, 150), Point(150, 50)]
         pyxel.run(self.update, self.draw)
 
     def update(self):
-        self.x = (self.x + 1) % pyxel.width
+        pass
 
     def draw(self):
         pyxel.cls(0)
-        pyxel.rect(self.x, 0, 8, 8, 9)
+        for point in self.points:
+            point.draw()
 
 App()
