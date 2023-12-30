@@ -53,7 +53,7 @@ class Transformer:
         R = [[math.cos(theta), -math.sin(theta), 0], 
              [math.sin(theta), math.cos(theta), 0],
              [0, 0, 1]] # Rotation matrix to rotate base vector -> target vector
-        scale = length(baseVector) / length(targetVector)
+        scale = length(targetVector) / length(baseVector)
         S = [[scale, 0, 0], [0, scale, 0], [0, 0, 1]] # Scale matrix to scale base -> target
         T2 = [[1, 0, target.s.x], [0, 1, target.s.y], [0, 0, 1]] # Translation matrix to move (0, 0) -> target
         T = product_matrix(T2, product_matrix(S, product_matrix(R, T1)))
