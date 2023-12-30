@@ -27,7 +27,7 @@ def create_point_from_vector(vector :list) -> Point:
     return Point(vector[0], vector[1])
 
 class Line:
-    def __init__(self, s :Point, t :Point, reverse :bool) -> None:
+    def __init__(self, s :Point, t :Point, reverse :bool=False) -> None:
         self.s = s
         self.t = t
         self.reverse = reverse
