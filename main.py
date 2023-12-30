@@ -56,15 +56,15 @@ class Transformer:
              [0, 0, 1]] # Rotation matrix to rotate base vector -> target vector
         scale = length(targetVector) / length(baseVector)
         S = [[scale, 0, 0], [0, scale, 0], [0, 0, 1]] # Scale matrix to scale base -> target
-        tau = math.atan2(targetVector[1], targetVector[0])
         if target.reverse:
+            tau = math.atan2(targetVector[1], targetVector[0])
             M = [[math.cos(2*tau), math.sin(2*tau), 0], 
                 [math.sin(2*tau), -math.cos(2*tau), 0],
                 [0, 0, 1]] # Reflection matrix to reflect symmetrically to the target vector
-            T2 = [[1, 0, target.s.x], [0, 1, target.s.y], [0, 0, 1]] # Translation matrix to move (0, 0) -> target
-            T = product_matrix(T2, product_matrix(M, product_matrix(S, product_matrix(R, T1))))
         else:
-            T = product_matrix(T2, product_matrix(S, product_matrix(R, T1)))
+            M = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+        T2 = [[1, 0, target.s.x], [0, 1, target.s.y], [0, 0, 1]] # Translation matrix to move (0, 0) -> target
+        T = product_matrix(T2, product_matrix(M, product_matrix(S, product_matrix(R, T1))))
         print("T1", T1)
         print("T2", T2)
         print("T", T)
