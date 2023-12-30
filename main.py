@@ -90,11 +90,11 @@ def product(A :list[list[N]], B: list[N]) -> list[N]:
         result.append(tmp)
     return result
 
-def cross(a :list[N], b :list[N]) -> N:
+def inner(a :list[N], b :list[N]) -> N:
     return a[0]*b[0] + a[1]*b[1]
 
-def inner(a :list[N], b :list[N]) -> N:
-    return a[0]*b[0] - a[1]*b[0]
+def cross(a :list[N], b :list[N]) -> N:
+    return a[0]*b[1] - a[1]*b[0]
 
 def length(a :list[N]) -> N:
     return math.sqrt(a[0]**2 + a[1]**2)
