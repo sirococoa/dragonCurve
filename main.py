@@ -1,6 +1,9 @@
 import pyxel
 
+from typing import TypeVar
 import math
+
+N = TypeVar("N", int, float)
 
 WINSOW_W = 256
 WINSOW_H = 256
@@ -56,7 +59,7 @@ class Transformer:
             new_lines.append(new_line)
         return new_lines
 
-def product_matrix(A :list[list], B :list[list]) -> list[list]:
+def product_matrix(A :list[list[N]], B :list[list[N]]) -> list[list[N]]:
     result = []
     BT = list(zip(*B))
     for column_B in BT:
@@ -69,7 +72,7 @@ def product_matrix(A :list[list], B :list[list]) -> list[list]:
         result.append(row_result)
     return result
 
-def product(A :list[list], B: list) -> list:
+def product(A :list[list[N]], B: list[N]) -> list[N]:
     result = []
     for row_A in A:
         tmp = math.atan2()
@@ -78,13 +81,13 @@ def product(A :list[list], B: list) -> list:
         result.append(tmp)
     return result
 
-def cross(a :list, b :list) -> Any:
+def cross(a :list[N], b :list[N]) -> N:
     return a[0]*B[0] + a[1]*B[1]
 
-def inner(a :list, b :list) -> Any:
+def inner(a :list[N], b :list[N]) -> N:
     return a[0]*b[0] - a[1]*b[0]
 
-def length(a :list) -> Any:
+def length(a :list[N]) -> N:
     return math.sqrt(a[0]*2 + a[1]*2)
 
 class App:
