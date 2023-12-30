@@ -82,7 +82,7 @@ def product(A :list[list[N]], B: list[N]) -> list[N]:
     return result
 
 def cross(a :list[N], b :list[N]) -> N:
-    return a[0]*B[0] + a[1]*B[1]
+    return a[0]*b[0] + a[1]*b[1]
 
 def inner(a :list[N], b :list[N]) -> N:
     return a[0]*b[0] - a[1]*b[0]
