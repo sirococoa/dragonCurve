@@ -24,7 +24,7 @@ class App:
     def __init__(self):
         pyxel.init(WINSOW_W, WINSOW_H)
         self.points = [Point(50, 50), Point(50, 150), Point(150, 150), Point(150, 50)]
-        self.lines = [Line(*points[:2]), Line(*points[1:3]), Line(*points[2:4])]
+        self.lines = [Line(*self.points[:2]), Line(*self.points[1:3]), Line(*self.points[2:4])]
         pyxel.run(self.update, self.draw)
 
     def update(self):
