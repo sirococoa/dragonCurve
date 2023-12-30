@@ -56,7 +56,7 @@ class Transformer:
              [0, 0, 1]] # Rotation matrix to rotate base vector -> target vector
         scale = length(targetVector) / length(baseVector)
         S = [[scale, 0, 0], [0, scale, 0], [0, 0, 1]] # Scale matrix to scale base -> target
-        tau = math.atan2(target.y, target.x)
+        tau = math.atan2(targetVector[1], targetVector[0])
         if target.reverse:
             M = [[math.cos(2*tau), math.sin(2*tau), 0], 
                 [math.sin(2*tau), -math.cos(2*tau), 0],
