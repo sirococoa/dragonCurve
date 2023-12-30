@@ -112,7 +112,7 @@ class App:
             new_lines = []
             for line in self.lines:
                 new_lines.extend(self.transformer.transrate(line))
-                print(*self.new_lines)
+                print(*new_lines)
             self.lines = new_lines
 
     def draw(self):
