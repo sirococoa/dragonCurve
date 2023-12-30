@@ -27,9 +27,10 @@ def create_point_from_vector(vector :list) -> Point:
     return Point(vector[0], vector[1])
 
 class Line:
-    def __init__(self, s :Point, t :Point) -> None:
+    def __init__(self, s :Point, t :Point, reverse :bool) -> None:
         self.s = s
         self.t = t
+        self.reverse = reverse
     
     def draw(self):
         pyxel.line(self.s.x, self.s.y, self.t.x, self.t.y, 7)
@@ -55,8 +56,15 @@ class Transformer:
              [0, 0, 1]] # Rotation matrix to rotate base vector -> target vector
         scale = length(targetVector) / length(baseVector)
         S = [[scale, 0, 0], [0, scale, 0], [0, 0, 1]] # Scale matrix to scale base -> target
-        T2 = [[1, 0, target.s.x], [0, 1, target.s.y], [0, 0, 1]] # Translation matrix to move (0, 0) -> target
-        T = product_matrix(T2, product_matrix(S, product_matrix(R, T1)))
+        tau = math.atan2(target.y, target.x)
+        if target.reverse:
+            M = [[math.cos(2*tau), math.sin(2*tau), 0], 
+                [math.sin(2*tau), -math.cos(2*tau), 0],
+                [0, 0, 1]] # Reflection matrix to reflect symmetrically to the target vector
+            T2 = [[1, 0, target.s.x], [0, 1, target.s.y], [0, 0, 1]] # Translation matrix to move (0, 0) -> target
+            T = product_matrix(T2, product_matrix(M, product_matrix(S, product_matrix(R, T1))))
+        else:
+            T = product_matrix(T2, product_matrix(S, product_matrix(R, T1)))
         print("T1", T1)
         print("T2", T2)
         print("T", T)
@@ -64,7 +72,7 @@ class Transformer:
         for line in self.lines:
             new_sv = product(T, line.s.vector())
             new_tv = product(T, line.t.vector())
-            new_line = Line(create_point_from_vector(new_sv), create_point_from_vector(new_tv))
+            new_line = Line(create_point_from_vector(new_sv), create_point_from_vector(new_tv), line.reverse)
             new_lines.append(new_line)
         return new_lines
 
@@ -102,8 +110,8 @@ def length(a :list[N]) -> N:
 class App:
     def __init__(self):
         pyxel.init(WINSOW_W, WINSOW_H)
-        self.points = [Point(50, 150), Point(100, 100), Point(150, 150), Point(100, 100)]
-        self.lines = [Line(*self.points[0:2]), Line(*self.points[2:4])]
+        self.points = [Point(50, 150), Point(100, 100), Point(150, 150)]
+        self.lines = [Line(*self.points[0:2], False), Line(*self.points[1:3], True)]
         self.transformer = Transformer(self.lines)
         pyxel.run(self.update, self.draw)
 
