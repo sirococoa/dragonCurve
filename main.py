@@ -19,6 +19,9 @@ class Point:
 
     def vector(self) -> list:
         return [self.x, self.y, 1]
+
+    def __str__(self) -> str:
+        return f"({self.x},{self.y})"
     
 def create_point_from_vector(vector :list) -> Point:
     return Point(vector[0], vector[1])
@@ -33,6 +36,9 @@ class Line:
 
     def vector(self) -> list:
         return [self.t.x - self.s.x, self.t.y - self.s.y, 0]
+    
+    def __str__(self) -> str:
+        return f"{self.s}->{self.t}"
 
 class Transformer:
     def __init__(self, lines :list[Line]) -> None:
@@ -100,6 +106,8 @@ class App:
         self.new_lines = []
         for line in self.lines:
             self.new_lines.extend(self.transformer.transrate(line))
+        print(*self.lines)
+        print(*self.new_lines)
         pyxel.run(self.update, self.draw)
 
     def update(self):
