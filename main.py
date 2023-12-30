@@ -102,26 +102,22 @@ def length(a :list[N]) -> N:
 class App:
     def __init__(self):
         pyxel.init(WINSOW_W, WINSOW_H)
-        self.points = [Point(50, 150), Point(100, 100), Point(150, 150),]
-        self.lines = [Line(*self.points[:2]), Line(*self.points[1:3])]
+        self.points = [Point(50, 150), Point(100, 100), Point(150, 150), Point(100, 100)]
+        self.lines = [Line(*self.points[0:2]), Line(*self.points[2:4])]
         self.transformer = Transformer(self.lines)
-        self.new_lines = []
-        for line in self.lines:
-            self.new_lines.extend(self.transformer.transrate(line))
-        print(*self.lines)
-        print(*self.new_lines)
         pyxel.run(self.update, self.draw)
 
     def update(self):
-        pass
+        if pyxel.btnp(pyxel.KEY_SPACE, repeat=60):
+            new_lines = []
+            for line in self.lines:
+                new_lines.extend(self.transformer.transrate(line))
+                print(*self.new_lines)
+            self.lines = new_lines
 
     def draw(self):
         pyxel.cls(0)
-        if pyxel.frame_count % 60 < 30:
-            for line in self.lines:
-                line.draw()
-        else:
-            for line in self.new_lines:
+        for line in self.lines:
                 line.draw()
         for point in self.points:
             point.draw()
