@@ -140,7 +140,7 @@ class App:
         self.points = []
         self.lines = []
         self.finish_lines = []
-        self.transformer = Transformer(self.lines)
+        self.transformer = None
         pyxel.run(self.update, self.draw)
 
     def update(self):
@@ -149,6 +149,7 @@ class App:
             if pyxel.btnp(pyxel.KEY_SPACE, repeat=60) and self.editor.generatable():
                 self.points, self.lines = self.editor.generate()
                 self.state = "Translate"
+                self.transformer = Transformer(self.lines)
         elif self.state == "Translate":
             if pyxel.btnp(pyxel.KEY_SPACE, repeat=60):
                 new_lines = []
