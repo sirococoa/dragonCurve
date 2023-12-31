@@ -370,6 +370,7 @@ class ResetButton(Button):
 
 class App:
     MAX_LINE_NUM = 5000
+    MAX_TRANSLATION_NUM = 10
     MAX_PROCESS_NUM_PER_FRAME = 100
 
     def __init__(self):
@@ -389,6 +390,7 @@ class App:
         self.lines = []
         self.line_queue = []
         self.transformer = None
+        self.translation_count = 0
         self.panel.reset()
         self.canvas = Canvas()
     
@@ -410,6 +412,11 @@ class App:
             if pyxel.btnp(pyxel.KEY_R, repeat=60):
                 self.reset()
             if not self.line_queue:
+                if self.translation_count >= self.MAX_TRANSLATION_NUM:
+                    for line in self.lines:
+                        self.canvas.register_line(line)
+                    self.lines = []
+                    self.translation_count += 1
                 if len(self.lines) > self.MAX_LINE_NUM:
                     sampled_lines = random.sample(self.lines, self.MAX_LINE_NUM)
                     for line in self.lines:
