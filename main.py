@@ -111,6 +111,7 @@ class Editor:
     def __init__(self) -> None:
         self.points = []
         self.block_area = lambda x, y: False
+        self.color = 7
 
     def regist_block_area(self, block_area :Callable[[int, int], bool]) -> None:
         self.block_area = block_area
@@ -133,7 +134,10 @@ class Editor:
 
     def generatable(self) -> bool:
         return len(self.points) >= 3
-    
+
+    def next_color(self) -> None:
+        self.color = (self.color + 1) % 16
+
     def draw(self):
         for point in self.points:
             point.draw()
@@ -158,8 +162,12 @@ class Panel:
     START_BUTTON_X = CLOSE_BUTTON_X - START_BUTTON_SIZE - MARGIN
     START_BUTTON_Y = WINSOW_H - START_BUTTON_SIZE - MARGIN
     START_BUTTON_CLOLOR = 3
+    COLOR_BUTTON_SIZE = 30
+    COLOR_BUTTON_SIZE_OFFSET = 2
+    COLOR_BUTTON_X = START_BUTTON_X - COLOR_BUTTON_SIZE - MARGIN
+    COLOR_BUTTON_Y = WINSOW_H - COLOR_BUTTON_SIZE - MARGIN
     DELETE_BUTTON_SIZE = 30
-    DELETE_BUTTON_X = START_BUTTON_X - DELETE_BUTTON_SIZE - MARGIN
+    DELETE_BUTTON_X = COLOR_BUTTON_X - DELETE_BUTTON_SIZE - MARGIN
     DELETE_BUTTON_Y = WINSOW_H - DELETE_BUTTON_SIZE - MARGIN
     DELETE_BUTTON_CLOLOR = 1
 
@@ -173,6 +181,7 @@ class Panel:
         self.panel_buttons = []
         self.panel_buttons.append(Button(self.START_BUTTON_X, self.START_BUTTON_Y, self.START_BUTTON_SIZE, self.click_start_button, self.draw_start_button, active=False))
         self.panel_buttons.append(Button(self.DELETE_BUTTON_X, self.DELETE_BUTTON_Y, self.DELETE_BUTTON_SIZE, self.click_delete_button, self.draw_delete_button, active=False))
+        self.panel_buttons.append(Button(self.COLOR_BUTTON_X, self.COLOR_BUTTON_Y, self.COLOR_BUTTON_SIZE, self.click_color_button, self.draw_color_button, active=False))
 
     def update(self) -> None:
         self.open_button.update()
@@ -209,6 +218,9 @@ class Panel:
 
     def click_delete_button(self):
         self.editor.delete()
+    
+    def click_color_button(self):
+        self.editor.next_color()
 
     def draw_open_button(self):
         pyxel.rect(self.OPEN_BUTTON_X, self.OPEN_BUTTON_Y, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_CLOLOR)
@@ -221,6 +233,13 @@ class Panel:
 
     def draw_delete_button(self):
         pyxel.rect(self.DELETE_BUTTON_X, self.DELETE_BUTTON_Y, self.DELETE_BUTTON_SIZE, self.DELETE_BUTTON_SIZE, self.DELETE_BUTTON_CLOLOR)
+
+    def draw_color_button(self):
+        x = self.COLOR_BUTTON_X + self.COLOR_BUTTON_SIZE // 2
+        y = self.COLOR_BUTTON_Y + self.COLOR_BUTTON_SIZE // 2
+        r = self.COLOR_BUTTON_SIZE // 2 + self.COLOR_BUTTON_SIZE_OFFSET
+        c = self.editor.color
+        pyxel.circ(x, y, r, c)
 
     def block_editor_panel_area(self, x :int, y :int) -> bool:
         return 0 <= x - self.X <= self.WIDTH and 0 <= y - self.Y <= self.HEIGHT
