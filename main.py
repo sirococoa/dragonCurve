@@ -346,6 +346,10 @@ class App:
             if pyxel.btnp(pyxel.KEY_R, repeat=60):
                 self.reset()
             if not self.line_queue:
+                if len(self.lines) > self.MAX_LINE_NUM:
+                    sampled_lines = random.sample(self.lines, self.MAX_LINE_NUM)
+                    self.finish_lines.extend([line for line in self.lines if line not in sampled_lines])
+                    self.lines = sampled_lines
                 self.line_queue = copy(self.lines)
                 self.lines = []
             for _ in range(self.MAX_PROCESS_NUM_PER_FRAME):
@@ -358,10 +362,6 @@ class App:
                         self.finish_lines.append(new_line)
                     else:
                         self.lines.append(new_line)
-            if len(self.lines) > self.MAX_LINE_NUM:
-                sampled_lines = random.sample(self.lines, self.MAX_LINE_NUM)
-                self.finish_lines.extend([line for line in self.lines if line not in sampled_lines])
-                self.lines = sampled_lines
             print(len(self.lines), len(self.line_queue), len(self.finish_lines))
         else:
             pass
