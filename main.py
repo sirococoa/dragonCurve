@@ -356,6 +356,7 @@ class App:
                         self.finish_lines.append(new_line)
                     else:
                         self.lines.append(new_line)
+            print(len(self.lines), len(self.line_queue), len(self.finish_lines))
         else:
             pass
 
