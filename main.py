@@ -417,7 +417,7 @@ class App:
                 line = self.line_queue.pop()
                 new_lines = self.transformer.transrate(line)
                 for new_line in new_lines:
-                    if new_line.over_area:
+                    if new_line.over_area():
                         self.canvas.register_line(new_line)
                         continue
                     if finish_translate(new_line):
