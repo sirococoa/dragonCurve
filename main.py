@@ -188,7 +188,7 @@ class Panel:
         pyxel.rect(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_CLOLOR)
 
     def block_editor_panel_area(self, x :int, y :int) -> bool:
-        return 0 <= x - self.X <= self.WIDTH and 0 <= y - self.Y <= self.SIZE
+        return 0 <= x - self.X <= self.WIDTH and 0 <= y - self.Y <= self.HEIGHT
 
     def block_editor_open_button_area(self, x :int, y :int) -> bool:
         return 0 <= x - self.OPEN_BUTTON_X <= self.OPEN_BUTTON_SIZE and 0 <= y - self.OPEN_BUTTON_Y <= self.OPEN_BUTTON_SIZE
