@@ -1,6 +1,6 @@
 import pyxel
 
-from typing import TypeVar
+from typing import TypeVar, Callable
 import math
 
 N = TypeVar("N", int, float)
@@ -131,12 +131,84 @@ class Editor:
         for point in self.points:
             point.draw()
 
+class Panel:
+    WIDTH = WINSOW_W
+    HEIGHT = 50
+    X = 0
+    Y = WINSOW_H - HEIGHT
+    MARGIN = 10
+    COLOR = 14
+
+    OPEN_BUTTON_SIZE = 30
+    OPEN_BUTTON_X = WINSOW_W - OPEN_BUTTON_SIZE - MARGIN
+    OPEN_BUTTON_Y = WINSOW_H - OPEN_BUTTON_SIZE - MARGIN
+    OPEN_BUTTON_CLOLOR = 14
+    CLOSE_BUTTON_SIZE = 30
+    CLOSE_BUTTON_X = WINSOW_W - CLOSE_BUTTON_SIZE - MARGIN
+    CLOSE_BUTTON_Y = WINSOW_H - CLOSE_BUTTON_SIZE - MARGIN
+    CLOSE_BUTTON_CLOLOR = 8
+
+    def __init__(self, editor :Editor) -> None:
+        self.editor = editor
+        self.active = False
+        self.open_button = Button(self.OPEN_BUTTON_X, self.OPEN_BUTTON_Y, self.OPEN_BUTTON_SIZE, self.click_open_button, self.draw_open_button)
+        self.close_button = Button(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.click_close_button, self.draw_close_button)
+
+    def update(self) -> None:
+        self.open_button.update()
+        self.close_button.update()
+
+    def draw(self):
+        pyxel.rect(self.X, self.Y, self.WIDTH, self.HEIGHT, self.COLOR)
+        self.open_button.draw()
+        self.close_button.draw()
+
+    def click_open_button(self):
+        self.active = True
+
+    def click_close_button(self):
+        self.active = False
+    
+    def draw_open_button(self):
+        pyxel.rect(self.OPEN_BUTTON_X, self.OPEN_BUTTON_Y, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_CLOLOR)
+
+    def draw_close_button(self):
+        pyxel.rect(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_CLOLOR)
+
+class Button:
+    def __init__(self, x :int, y :int, size :int, click :Callable[[], None], drawf :Callable[[], None]) -> None:
+        self.x = x
+        self.y = y
+        self.size = size
+        self.click = click
+        self.drawf = drawf
+        self._active = true
+
+    def update(self) -> None:
+        if not self._active:
+            return
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT, repeat=10):
+            if 0 <= self.x - pyxel.mouse_x <= size and 0 <= self.y - pyxel.mouse_y <= size:
+                self.click()
+
+    def draw(self) -> None:
+        if not self._active:
+            return
+        self.drawf()
+
+    def active(self) -> None:
+        self._active = True
+    
+    def disactive(self) -> None:
+        self._active = False
+
 class App:
     def __init__(self):
         pyxel.init(WINSOW_W, WINSOW_H)
         pyxel.mouse(True)
 
         self.editor = Editor()
+        self.panel = Panel(self.editor)
         self.state = "Edit"
 
         self.points = []
@@ -156,6 +228,7 @@ class App:
     def update(self):
         if self.state == "Edit":
             self.editor.update()
+            self.panel.update()
             if pyxel.btnp(pyxel.KEY_SPACE, repeat=60) and self.editor.generatable():
                 self.points, self.lines = self.editor.generate()
                 self.state = "Translate"
@@ -176,6 +249,7 @@ class App:
         pyxel.cls(0)
         if self.state == "Edit":
             self.editor.draw()
+            self.panel.update()
         elif self.state == "Translate":
             for line in self.lines:
                     line.draw()
