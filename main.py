@@ -271,15 +271,16 @@ class App:
         self.transformer = None
     
     def start(self):
-        self.points, self.lines = self.editor.generate()
-        self.state = "Translate"
-        self.transformer = Transformer(self.lines)
+        if self.editor.generatable():
+            self.points, self.lines = self.editor.generate()
+            self.state = "Translate"
+            self.transformer = Transformer(self.lines)
 
     def update(self):
         if self.state == "Edit":
             self.editor.update()
             self.panel.update()
-            if pyxel.btnp(pyxel.KEY_SPACE, repeat=60) and self.editor.generatable():
+            if pyxel.btnp(pyxel.KEY_SPACE, repeat=60):
                 self.start()
         elif self.state == "Translate":
             if pyxel.btnp(pyxel.KEY_SPACE, repeat=60):
