@@ -188,7 +188,7 @@ class Button:
         if not self._active:
             return
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT, repeat=10):
-            if 0 <= self.x - pyxel.mouse_x <= size and 0 <= self.y - pyxel.mouse_y <= size:
+            if 0 <= self.x - pyxel.mouse_x <= self.size and 0 <= self.y - pyxel.mouse_y <= self.size:
                 self.click()
 
     def draw(self) -> None:
