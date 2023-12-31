@@ -303,6 +303,8 @@ class ResetButton(Button):
         pyxel.rect(self.X, self.Y, self.SIZE, self.SIZE, self.CLOLOR)
 
 class App:
+    MAX_PROCESS_NUM_PER_FRAME = 100
+
     def __init__(self):
         pyxel.init(WINSOW_W, WINSOW_H)
         pyxel.mouse(True)
@@ -323,6 +325,7 @@ class App:
         self.state = "Edit"
         self.points = []
         self.lines = []
+        self.line_queue = []
         self.finish_lines = []
         self.transformer = None
         self.panel.reset()
@@ -342,14 +345,21 @@ class App:
                 self.start()
         elif self.state == "Translate":
             self.reset_button.update()
-            if pyxel.btnp(pyxel.KEY_SPACE, repeat=60):
-                new_lines = []
-                for line in self.lines:
-                    new_lines.extend(self.transformer.transrate(line))
-                self.lines = [line for line in new_lines if not finish_translate(line)]
-                self.finish_lines.extend([line for line in new_lines if line not in self.lines])
             if pyxel.btnp(pyxel.KEY_R, repeat=60):
                 self.reset()
+            if not self.line_queue:
+                self.line_queue = self.lines
+                self.line = []
+            for _ in range(self.MAX_PROCESS_NUM_PER_FRAME):
+                if not self.line_queue:
+                    break
+                line = self.line_queue.pop()
+                new_lines = self.transformer.transrate(line)
+                for line in new_lines:
+                    if finish_translate(line):
+                        self.finish_lines.append(line)
+                    else:
+                        self.lines.append(line)
         else:
             pass
 
