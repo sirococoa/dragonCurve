@@ -165,12 +165,12 @@ class Panel:
         self.close_button.draw()
 
     def click_open_button(self):
-        self.hide = True
+        self.hide = False
         self.open_button.disactive()
         self.close_button.active()
 
     def click_close_button(self):
-        self.hide = False
+        self.hide = True
         self.open_button.active()
         self.close_button.disactive()
     
