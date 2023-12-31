@@ -149,7 +149,7 @@ class Canvas:
                         x = int(dx / dy * (y - sy) + sx - 0.5)
                     self.register_dots(x, y)
 
-    def register_dots(x :int, y :int, color :int) -> None:
+    def register_dots(self, x :int, y :int, color :int) -> None:
         self.dots[(x, y)] = color
     
     def draw(self) -> None:
