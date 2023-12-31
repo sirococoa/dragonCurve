@@ -249,7 +249,7 @@ class App:
         pyxel.cls(0)
         if self.state == "Edit":
             self.editor.draw()
-            self.panel.update()
+            self.panel.draw()
         elif self.state == "Translate":
             for line in self.lines:
                     line.draw()
