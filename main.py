@@ -176,6 +176,7 @@ class Editor:
 
     def __init__(self) -> None:
         self.points = []
+        self.lines = []
         self.block_area = lambda x, y: False
         self.color = 7
 
@@ -185,11 +186,15 @@ class Editor:
     def delete(self):
         if self.points:
             self.points.pop()
+            if len(self.points) >= 2:
+                _, self.lines = self.generate()
 
     def update(self):
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT, repeat=10) and not self.block_area(pyxel.mouse_x, pyxel.mouse_y):
             if len(self.points) < self.MAX_POINT_NUM:
                 self.points.append(Point(pyxel.mouse_x, pyxel.mouse_y, self.color))
+                if len(self.points) >= 2:
+                    _, self.lines = self.generate()
         if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT, repeat=10):
             self.delete()
 
@@ -206,6 +211,8 @@ class Editor:
         self.color = (self.color + 1) % 16
 
     def draw(self):
+        for line in self.lines:
+            line.draw()
         for point in self.points:
             point.draw()
 
