@@ -371,7 +371,7 @@ class ResetButton(Button):
 class App:
     MAX_LINE_NUM = 5000
     MAX_TRANSLATION_NUM = 30
-    MAX_PROCESS_NUM_PER_FRAME = 100
+    MAX_PROCESS_NUM_PER_FRAME = 50
 
     def __init__(self):
         pyxel.init(WINDOW_W, WINDOW_H)
