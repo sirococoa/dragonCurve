@@ -134,6 +134,8 @@ class Editor:
 class App:
     def __init__(self):
         pyxel.init(WINSOW_W, WINSOW_H)
+        pyxel.mouse(True)
+
         self.editor = Editor()
         self.state = "Edit"
 
