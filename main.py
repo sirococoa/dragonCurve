@@ -208,7 +208,7 @@ class Panel:
         self.app.start()
 
     def click_delete_button(self):
-        self.edior.delete()
+        self.editor.delete()
 
     def draw_open_button(self):
         pyxel.rect(self.OPEN_BUTTON_X, self.OPEN_BUTTON_Y, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_CLOLOR)
