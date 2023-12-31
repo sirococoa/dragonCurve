@@ -110,7 +110,7 @@ def length(a :list[N]) -> N:
 class Editor:
     def __init__(self) -> None:
         self.points = []
-        self.block_area = lambda x, y: false
+        self.block_area = lambda x, y: False
 
     def regist_block_area(self, block_area :Callable[[int, int], bool]) -> None:
         self.block_area = block_area
@@ -243,7 +243,6 @@ class App:
         pyxel.run(self.update, self.draw)
 
     def reset(self):
-        self.editor = Editor()
         self.state = "Edit"
         self.points = []
         self.lines = []
