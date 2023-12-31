@@ -226,16 +226,16 @@ class Panel:
     X = 0
     Y = WINDOW_H - HEIGHT
     MARGIN = 10
-    COLOR = 14
+    COLOR = 10
 
     OPEN_BUTTON_SIZE = 30
     OPEN_BUTTON_X = WINDOW_W - OPEN_BUTTON_SIZE - MARGIN
     OPEN_BUTTON_Y = WINDOW_H - OPEN_BUTTON_SIZE - MARGIN
-    OPEN_BUTTON_CLOLOR = 14
+    OPEN_BUTTON_CLOLOR = 10
     CLOSE_BUTTON_SIZE = 30
     CLOSE_BUTTON_X = WINDOW_W - CLOSE_BUTTON_SIZE - MARGIN
     CLOSE_BUTTON_Y = WINDOW_H - CLOSE_BUTTON_SIZE - MARGIN
-    CLOSE_BUTTON_CLOLOR = 8
+    CLOSE_BUTTON_CLOLOR = 0
     START_BUTTON_SIZE = 30
     START_BUTTON_X = CLOSE_BUTTON_X - START_BUTTON_SIZE - MARGIN
     START_BUTTON_Y = WINDOW_H - START_BUTTON_SIZE - MARGIN
@@ -247,7 +247,7 @@ class Panel:
     DELETE_BUTTON_SIZE = 30
     DELETE_BUTTON_X = COLOR_BUTTON_X - DELETE_BUTTON_SIZE - MARGIN
     DELETE_BUTTON_Y = WINDOW_H - DELETE_BUTTON_SIZE - MARGIN
-    DELETE_BUTTON_CLOLOR = 1
+    DELETE_BUTTON_CLOLOR = 8
 
     def __init__(self, app :'App', editor :Editor) -> None:
         self.app = app
@@ -310,7 +310,13 @@ class Panel:
         pyxel.rect(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_CLOLOR)
 
     def draw_start_button(self):
-        pyxel.rect(self.START_BUTTON_X, self.START_BUTTON_Y, self.START_BUTTON_SIZE, self.START_BUTTON_SIZE, self.START_BUTTON_CLOLOR)
+        x1 = self.START_BUTTON_X
+        y1 = self.START_BUTTON_Y
+        x2 = x1
+        y2 = y1 + self.START_BUTTON_SIZE
+        x3 = x1 + self.START_BUTTON_SIZE
+        y3 = y1 + self.START_BUTTON_SIZE // 2
+        pyxel.tri(x1, y1, x2, y2, x3, y3, self.START_BUTTON_CLOLOR)
 
     def draw_delete_button(self):
         pyxel.rect(self.DELETE_BUTTON_X, self.DELETE_BUTTON_Y, self.DELETE_BUTTON_SIZE, self.DELETE_BUTTON_SIZE, self.DELETE_BUTTON_CLOLOR)
@@ -320,7 +326,11 @@ class Panel:
         y = self.COLOR_BUTTON_Y + self.COLOR_BUTTON_SIZE // 2
         r = self.COLOR_BUTTON_SIZE // 2 + self.COLOR_BUTTON_SIZE_OFFSET
         c = self.editor.color
+        fc = (c + 1) % 16
+        if fc == 0:
+            fc = 1
         pyxel.circ(x, y, r, c)
+        pyxel.circb(x, y, r, fc)
 
     def block_editor_panel_area(self, x :int, y :int) -> bool:
         return 0 <= x - self.X <= self.WIDTH and 0 <= y - self.Y <= self.HEIGHT
