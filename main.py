@@ -182,7 +182,7 @@ class Button:
         self.size = size
         self.click = click
         self.drawf = drawf
-        self._active = true
+        self._active = True
 
     def update(self) -> None:
         if not self._active:
