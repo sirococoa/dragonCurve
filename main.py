@@ -156,7 +156,7 @@ class Panel:
     START_BUTTON_Y = WINSOW_H - START_BUTTON_SIZE - MARGIN
     START_BUTTON_CLOLOR = 3
 
-    def __init__(self, app :App, editor :Editor) -> None:
+    def __init__(self, app :'App', editor :Editor) -> None:
         self.app = app
         self.editor = editor
         self.hide = True
