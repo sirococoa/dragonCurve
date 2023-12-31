@@ -112,7 +112,7 @@ class Editor:
         self.points = []
         self.block_area = lambda x, y: false
 
-    def regist_block_area(block_area :Callable[[int, int], bool]) -> None:
+    def regist_block_area(self, block_area :Callable[[int, int], bool]) -> None:
         self.block_area = block_area
 
     def update(self):
