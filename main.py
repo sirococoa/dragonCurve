@@ -125,7 +125,7 @@ class Canvas:
     def __init__(self) -> None:
         self.dots = dict()
 
-    def regisre_line(self, line :Line) -> None:
+    def register_line(self, line :Line) -> None:
         sx, sy = int(line.s.x), int(line.s.y)
         tx, ty = int(line.t.x), int(line.t.y)
         dx, dy = sx - tx, sy - ty
@@ -407,7 +407,7 @@ class App:
                     sampled_lines = random.sample(self.lines, self.MAX_LINE_NUM)
                     for line in self.lines:
                         if line not in sampled_lines:
-                            self.canvas.regisre_line(line)
+                            self.canvas.register_line(line)
                     self.lines = sampled_lines
                 self.line_queue = copy(self.lines)
                 self.lines = []
@@ -418,10 +418,10 @@ class App:
                 new_lines = self.transformer.transrate(line)
                 for new_line in new_lines:
                     if new_line.over_area:
-                        self.canvas.regisre_line(new_line)
+                        self.canvas.register_line(new_line)
                         continue
                     if finish_translate(new_line):
-                        self.canvas.regisre_line(new_line)
+                        self.canvas.register_line(new_line)
                     else:
                         self.lines.append(new_line)
             print(len(self.lines), len(self.line_queue))
