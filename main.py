@@ -110,6 +110,52 @@ def cross(a :list[N], b :list[N]) -> N:
 def length(a :list[N]) -> N:
     return math.sqrt(a[0]**2 + a[1]**2)
 
+class Canvas:
+    def __init__(self) -> None:
+        self.dots = dict()
+
+    def regisre_line(self, line :Line) -> None:
+        sx, sy = int(line.s.x), int(line.s.y)
+        tx, ty = int(line.t.x), int(line.t.y)
+        dx, dy = sx - tx, sy - ty
+        if abs(dx) >= abs(dy):
+            if sx < tx:
+                for x in range(sx, tx):
+                    if dy / dx > 0:
+                        y = int(dy / dx * (x - sx) + sy + 0.5)
+                    else:
+                        y = int(dy / dx * (x - sx) + sy - 0.5)
+                    self.register_dots(x, y)
+            else:
+                for x in range(tx, sx):
+                    if dy / dx > 0:
+                        y = int(dy / dx * (x - sx) + sy + 0.5)
+                    else:
+                        y = int(dy / dx * (x - sx) + sy - 0.5)
+                    self.register_dots(x, y)
+        else:
+            if sy < ty:
+                for y in range(sy, ty):
+                    if dx / dy > 0:
+                        x = int(dx / dy * (y - sy) + sx + 0.5)
+                    else:
+                        x = int(dx / dy * (y - sy) + sx - 0.5)
+                    self.register_dots(x, y)
+            else:
+                for y in range(ty, sy):
+                    if dx / dy > 0:
+                        x = int(dx / dy * (y - sy) + sx + 0.5)
+                    else:
+                        x = int(dx / dy * (y - sy) + sx - 0.5)
+                    self.register_dots(x, y)
+
+    def register_dots(x :int, y :int, color :int) -> None:
+        self.dots[(x, y)] = color
+    
+    def draw(self) -> None:
+        for pos, color in self.dots.items():
+            pyxel.pset(pos[0], pos[1], color)
+
 class Editor:
     def __init__(self) -> None:
         self.points = []
@@ -324,9 +370,9 @@ class App:
         self.points = []
         self.lines = []
         self.line_queue = []
-        self.finish_lines = []
         self.transformer = None
         self.panel.reset()
+        self.canvas = Canvas()
     
     def start(self):
         if self.editor.generatable():
@@ -348,7 +394,9 @@ class App:
             if not self.line_queue:
                 if len(self.lines) > self.MAX_LINE_NUM:
                     sampled_lines = random.sample(self.lines, self.MAX_LINE_NUM)
-                    self.finish_lines.extend([line for line in self.lines if line not in sampled_lines])
+                    for line in self.lines:
+                        if line not in sampled_lines:
+                            self.canvas.regisre_line(line)
                     self.lines = sampled_lines
                 self.line_queue = copy(self.lines)
                 self.lines = []
@@ -359,7 +407,7 @@ class App:
                 new_lines = self.transformer.transrate(line)
                 for new_line in new_lines:
                     if finish_translate(new_line):
-                        self.finish_lines.append(new_line)
+                        self.canvas.regisre_line(new_line)
                     else:
                         self.lines.append(new_line)
             print(len(self.lines), len(self.line_queue), len(self.finish_lines))
@@ -376,10 +424,9 @@ class App:
                     line.draw()
             for line in self.line_queue:
                     line.draw()
-            for line in self.finish_lines:
-                    line.draw()
             for point in self.points:
                 point.draw()
+            self.canvas.draw()
             self.reset_button.draw()
         else:
             pass
