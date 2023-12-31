@@ -350,11 +350,11 @@ class App:
                     break
                 line = self.line_queue.pop()
                 new_lines = self.transformer.transrate(line)
-                for line in new_lines:
-                    if finish_translate(line):
-                        self.finish_lines.append(line)
+                for new_line in new_lines:
+                    if finish_translate(new_line):
+                        self.finish_lines.append(new_line)
                     else:
-                        self.lines.append(line)
+                        self.lines.append(new_line)
         else:
             pass
 
