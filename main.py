@@ -9,13 +9,14 @@ WINSOW_W = 256
 WINSOW_H = 256
 
 class Point:
-    def __init__(self, x, y):
+    def __init__(self, x, y, color):
         self.x = x
         self.y = y
         self.r = 10
+        self.color = color
 
     def draw(self):
-        pyxel.circb(self.x, self.y, self.r, 7)
+        pyxel.circb(self.x, self.y, self.r, self.color)
 
     def vector(self) -> list:
         return [self.x, self.y, 1]
@@ -33,7 +34,7 @@ class Line:
         self.reverse = reverse
     
     def draw(self):
-        pyxel.line(self.s.x, self.s.y, self.t.x, self.t.y, 7)
+        pyxel.line(self.s.x, self.s.y, self.t.x, self.t.y, self.t.color)
 
     def vector(self) -> list:
         return [self.t.x - self.s.x, self.t.y - self.s.y, 0]
@@ -69,7 +70,7 @@ class Transformer:
         for line in self.lines:
             new_sv = product(T, line.s.vector())
             new_tv = product(T, line.t.vector())
-            new_line = Line(create_point_from_vector(new_sv), create_point_from_vector(new_tv), line.reverse)
+            new_line = Line(Point(new_sv[0], new_sv[1], line.s.color), Point(new_tv[0], new_tv[1], line.t.color), line.reverse)
             new_lines.append(new_line)
         return new_lines
 
@@ -122,7 +123,7 @@ class Editor:
 
     def update(self):
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT, repeat=10) and not self.block_area(pyxel.mouse_x, pyxel.mouse_y):
-            self.points.append(Point(pyxel.mouse_x, pyxel.mouse_y))
+            self.points.append(Point(pyxel.mouse_x, pyxel.mouse_y, self.color))
         if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT, repeat=10):
             self.delete()
 
