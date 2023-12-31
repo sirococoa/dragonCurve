@@ -150,24 +150,29 @@ class Panel:
 
     def __init__(self, editor :Editor) -> None:
         self.editor = editor
-        self.active = False
+        self.hide = True
         self.open_button = Button(self.OPEN_BUTTON_X, self.OPEN_BUTTON_Y, self.OPEN_BUTTON_SIZE, self.click_open_button, self.draw_open_button)
-        self.close_button = Button(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.click_close_button, self.draw_close_button)
+        self.close_button = Button(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.click_close_button, self.draw_close_button, active=False)
 
     def update(self) -> None:
         self.open_button.update()
         self.close_button.update()
 
     def draw(self):
-        pyxel.rect(self.X, self.Y, self.WIDTH, self.HEIGHT, self.COLOR)
+        if self.hide:
+            pyxel.rect(self.X, self.Y, self.WIDTH, self.HEIGHT, self.COLOR)
         self.open_button.draw()
         self.close_button.draw()
 
     def click_open_button(self):
-        self.active = True
+        self.hide = True
+        self.open_button.disactive()
+        self.close_button.active()
 
     def click_close_button(self):
-        self.active = False
+        self.hide = False
+        self.open_button.active()
+        self.close_button.disactive()
     
     def draw_open_button(self):
         pyxel.rect(self.OPEN_BUTTON_X, self.OPEN_BUTTON_Y, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_CLOLOR)
@@ -176,13 +181,13 @@ class Panel:
         pyxel.rect(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_CLOLOR)
 
 class Button:
-    def __init__(self, x :int, y :int, size :int, click :Callable[[], None], drawf :Callable[[], None]) -> None:
+    def __init__(self, x :int, y :int, size :int, click :Callable[[], None], drawf :Callable[[], None], active :bool=True) -> None:
         self.x = x
         self.y = y
         self.size = size
         self.click = click
         self.drawf = drawf
-        self._active = True
+        self._active = active
 
     def update(self) -> None:
         if not self._active:
