@@ -173,7 +173,7 @@ class Panel:
         self.hide = False
         self.open_button.disactive()
         self.close_button.active()
-        self.editor.regist_block_area(self.block_editor_pannel_area)
+        self.editor.regist_block_area(self.block_editor_panel_area)
 
     def click_close_button(self):
         self.hide = True
