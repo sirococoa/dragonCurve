@@ -366,6 +366,8 @@ class App:
         elif self.state == "Translate":
             for line in self.lines:
                     line.draw()
+            for line in self.line_queue:
+                    line.draw()
             for line in self.finish_lines:
                     line.draw()
             for point in self.points:
