@@ -110,11 +110,15 @@ def length(a :list[N]) -> N:
 class Editor:
     def __init__(self) -> None:
         self.points = []
-    
+        self.block_area = lambda x, y: false
+
+    def regist_block_area(block_area :Callable[[int, int], bool]) -> None:
+        self.block_area = block_area
+
     def update(self):
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT, repeat=10):
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT, repeat=10) and not self.block_area(pyxel.mouse_x, pyxel.mouse_y):
             self.points.append(Point(pyxel.mouse_x, pyxel.mouse_y))
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT, repeat=10):
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT, repeat=10)and not self.block_area(pyxel.mouse_x, pyxel.mouse_y):
             if self.points:
                 self.points.pop()
 
@@ -153,6 +157,7 @@ class Panel:
         self.hide = True
         self.open_button = Button(self.OPEN_BUTTON_X, self.OPEN_BUTTON_Y, self.OPEN_BUTTON_SIZE, self.click_open_button, self.draw_open_button)
         self.close_button = Button(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.click_close_button, self.draw_close_button, active=False)
+        self.editor.regist_block_area(self.block_editor_open_button_area)
 
     def update(self) -> None:
         self.open_button.update()
@@ -168,17 +173,25 @@ class Panel:
         self.hide = False
         self.open_button.disactive()
         self.close_button.active()
+        self.editor.regist_block_area(self.block_editor_pannel_area)
 
     def click_close_button(self):
         self.hide = True
         self.open_button.active()
         self.close_button.disactive()
+        self.editor.regist_block_area(self.block_editor_open_button_area)
     
     def draw_open_button(self):
         pyxel.rect(self.OPEN_BUTTON_X, self.OPEN_BUTTON_Y, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_CLOLOR)
 
     def draw_close_button(self):
         pyxel.rect(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_CLOLOR)
+
+    def block_editor_panel_area(self, x :int, y :int) -> bool:
+        return 0 <= x - self.X <= self.WIDTH and 0 <= y - self.Y <= self.SIZE
+
+    def block_editor_open_button_area(self, x :int, y :int) -> bool:
+        return 0 <= x - self.OPEN_BUTTON_X <= self.OPEN_BUTTON_SIZE and 0 <= y - self.OPEN_BUTTON_Y <= self.OPEN_BUTTON_SIZE
 
 class Button:
     DELAY = 10
