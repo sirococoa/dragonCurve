@@ -416,6 +416,7 @@ class App:
                     for line in self.lines:
                         self.canvas.register_line(line)
                     self.lines = []
+                else:
                     self.translation_count += 1
                 if len(self.lines) > self.MAX_LINE_NUM:
                     sampled_lines = random.sample(self.lines, self.MAX_LINE_NUM)
