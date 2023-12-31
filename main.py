@@ -125,14 +125,14 @@ class Canvas:
                         y = int(dy / dx * (x - sx) + sy + 0.5)
                     else:
                         y = int(dy / dx * (x - sx) + sy - 0.5)
-                    self.register_dots(x, y)
+                    self.register_dots(x, y, line.t.color)
             else:
                 for x in range(tx, sx):
                     if dy / dx > 0:
                         y = int(dy / dx * (x - sx) + sy + 0.5)
                     else:
                         y = int(dy / dx * (x - sx) + sy - 0.5)
-                    self.register_dots(x, y)
+                    self.register_dots(x, y, line.t.color)
         else:
             if sy < ty:
                 for y in range(sy, ty):
@@ -140,14 +140,14 @@ class Canvas:
                         x = int(dx / dy * (y - sy) + sx + 0.5)
                     else:
                         x = int(dx / dy * (y - sy) + sx - 0.5)
-                    self.register_dots(x, y)
+                    self.register_dots(x, y, line.t.color)
             else:
                 for y in range(ty, sy):
                     if dx / dy > 0:
                         x = int(dx / dy * (y - sy) + sx + 0.5)
                     else:
                         x = int(dx / dy * (y - sy) + sx - 0.5)
-                    self.register_dots(x, y)
+                    self.register_dots(x, y, line.t.color)
 
     def register_dots(self, x :int, y :int, color :int) -> None:
         self.dots[(x, y)] = color
