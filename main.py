@@ -188,6 +188,8 @@ class Editor:
             self.points.pop()
             if len(self.points) >= 2:
                 _, self.lines = self.generate()
+            else:
+                self.lines = []
 
     def update(self):
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT, repeat=10) and not self.block_area(pyxel.mouse_x, pyxel.mouse_y):
