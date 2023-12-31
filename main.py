@@ -151,41 +151,62 @@ class Panel:
     CLOSE_BUTTON_X = WINSOW_W - CLOSE_BUTTON_SIZE - MARGIN
     CLOSE_BUTTON_Y = WINSOW_H - CLOSE_BUTTON_SIZE - MARGIN
     CLOSE_BUTTON_CLOLOR = 8
+    START_BUTTON_SIZE = 30
+    START_BUTTON_X = CLOSE_BUTTON_X - START_BUTTON_SIZE - MARGIN
+    START_BUTTON_Y = WINSOW_H - START_BUTTON_SIZE - MARGIN
+    START_BUTTON_CLOLOR = 3
 
-    def __init__(self, editor :Editor) -> None:
+    def __init__(self, app :App, editor :Editor) -> None:
+        self.app = app
         self.editor = editor
         self.hide = True
         self.open_button = Button(self.OPEN_BUTTON_X, self.OPEN_BUTTON_Y, self.OPEN_BUTTON_SIZE, self.click_open_button, self.draw_open_button)
         self.close_button = Button(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.click_close_button, self.draw_close_button, active=False)
         self.editor.regist_block_area(self.block_editor_open_button_area)
+        self.panel_buttons = []
+        self.panel_buttons.append(Button(self.START_BUTTON_X, self.START_BUTTON_Y, self.START_BUTTON_SIZE, self.click_start_button, self.draw_start_button, active=False))
 
     def update(self) -> None:
         self.open_button.update()
         self.close_button.update()
+        for button in self.panel_buttons:
+            button.update()
 
     def draw(self):
         if not self.hide:
             pyxel.rect(self.X, self.Y, self.WIDTH, self.HEIGHT, self.COLOR)
         self.open_button.draw()
         self.close_button.draw()
+        for button in self.panel_buttons:
+            button.draw()
 
     def click_open_button(self):
         self.hide = False
         self.open_button.disactive()
         self.close_button.active()
+        for button in self.panel_buttons:
+            button.active()
         self.editor.regist_block_area(self.block_editor_panel_area)
 
     def click_close_button(self):
         self.hide = True
         self.open_button.active()
         self.close_button.disactive()
+        for button in self.panel_buttons:
+            button.disactive()
         self.editor.regist_block_area(self.block_editor_open_button_area)
-    
+
+    def click_start_button(self):
+        self.app.start()
+
     def draw_open_button(self):
         pyxel.rect(self.OPEN_BUTTON_X, self.OPEN_BUTTON_Y, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_SIZE, self.OPEN_BUTTON_CLOLOR)
 
     def draw_close_button(self):
         pyxel.rect(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_CLOLOR)
+
+    def draw_start_button(self):
+        pyxel.rect(self.START_BUTTON_X, self.START_BUTTON_Y, self.START_BUTTON_SIZE, self.START_BUTTON_SIZE, self.START_BUTTON_CLOLOR)
 
     def block_editor_panel_area(self, x :int, y :int) -> bool:
         return 0 <= x - self.X <= self.WIDTH and 0 <= y - self.Y <= self.HEIGHT
@@ -233,7 +254,7 @@ class App:
         pyxel.mouse(True)
 
         self.editor = Editor()
-        self.panel = Panel(self.editor)
+        self.panel = Panel(self, self.editor)
         self.state = "Edit"
 
         self.points = []
@@ -248,15 +269,18 @@ class App:
         self.lines = []
         self.finish_lines = []
         self.transformer = None
+    
+    def start(self):
+        self.points, self.lines = self.editor.generate()
+        self.state = "Translate"
+        self.transformer = Transformer(self.lines)
 
     def update(self):
         if self.state == "Edit":
             self.editor.update()
             self.panel.update()
             if pyxel.btnp(pyxel.KEY_SPACE, repeat=60) and self.editor.generatable():
-                self.points, self.lines = self.editor.generate()
-                self.state = "Translate"
-                self.transformer = Transformer(self.lines)
+                self.start()
         elif self.state == "Translate":
             if pyxel.btnp(pyxel.KEY_SPACE, repeat=60):
                 new_lines = []
