@@ -410,7 +410,7 @@ class App:
                         self.canvas.regisre_line(new_line)
                     else:
                         self.lines.append(new_line)
-            print(len(self.lines), len(self.line_queue), len(self.finish_lines))
+            print(len(self.lines), len(self.line_queue))
         else:
             pass
 
