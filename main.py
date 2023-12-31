@@ -311,14 +311,9 @@ class App:
 
         self.editor = Editor()
         self.panel = Panel(self, self.editor)
-        self.state = "Edit"
-
         self.reset_button = ResetButton(self)
+        self.reset()
 
-        self.points = []
-        self.lines = []
-        self.finish_lines = []
-        self.transformer = None
         pyxel.run(self.update, self.draw)
 
     def reset(self):
