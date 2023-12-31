@@ -211,6 +211,8 @@ class Editor:
 
     def next_color(self) -> None:
         self.color = (self.color + 1) % 16
+        if self.color == 0:
+            self.color = 1
 
     def draw(self):
         for line in self.lines:
