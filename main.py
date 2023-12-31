@@ -294,7 +294,7 @@ class ResetButton(Button):
         self.app = app
 
     def click(self):
-        app.reset()
+        self.app.reset()
 
     def drawf(self):
         pyxel.rect(self.X, self.Y, self.SIZE, self.SIZE, self.CLOLOR)
