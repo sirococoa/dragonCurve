@@ -453,8 +453,6 @@ class App:
                     line.draw()
             for line in self.line_queue:
                     line.draw()
-            for point in self.points:
-                point.draw()
             self.canvas.draw()
             self.reset_button.draw()
         else:
