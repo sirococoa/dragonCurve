@@ -40,7 +40,18 @@ class Line:
 
     def vector(self) -> list:
         return [self.t.x - self.s.x, self.t.y - self.s.y, 0]
-    
+
+    def over_area(self) -> bool:
+        if not -WINDOW_W <= self.s.x <= WINDOW_W*2:
+            return True
+        if not -WINDOW_H <= self.s.y <= WINDOW_H*2:
+            return True
+        if not -WINDOW_W <= self.t.x <= WINDOW_W*2:
+            return True
+        if not -WINDOW_H <= self.t.y <= WINDOW_H*2:
+            return True
+        return False
+
     def __str__(self) -> str:
         return f"{self.s}->{self.t}"
 
@@ -406,6 +417,9 @@ class App:
                 line = self.line_queue.pop()
                 new_lines = self.transformer.transrate(line)
                 for new_line in new_lines:
+                    if new_line.over_area:
+                        self.canvas.regisre_line(new_line)
+                        continue
                     if finish_translate(new_line):
                         self.canvas.regisre_line(new_line)
                     else:
