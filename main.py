@@ -344,7 +344,7 @@ class App:
                 self.reset()
             if not self.line_queue:
                 self.line_queue = self.lines
-                self.line = []
+                self.lines = []
             for _ in range(self.MAX_PROCESS_NUM_PER_FRAME):
                 if not self.line_queue:
                     break
