@@ -172,6 +172,8 @@ class Canvas:
             pyxel.pset(pos[0], pos[1], color)
 
 class Editor:
+    MAX_POINT_NUM = 5
+
     def __init__(self) -> None:
         self.points = []
         self.block_area = lambda x, y: False
@@ -186,7 +188,8 @@ class Editor:
 
     def update(self):
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT, repeat=10) and not self.block_area(pyxel.mouse_x, pyxel.mouse_y):
-            self.points.append(Point(pyxel.mouse_x, pyxel.mouse_y, self.color))
+            if len(self.points) < self.MAX_POINT_NUM:
+                self.points.append(Point(pyxel.mouse_x, pyxel.mouse_y, self.color))
         if pyxel.btnp(pyxel.MOUSE_BUTTON_RIGHT, repeat=10):
             self.delete()
 
