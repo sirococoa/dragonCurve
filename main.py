@@ -184,6 +184,14 @@ class Panel:
         self.panel_buttons.append(Button(self.DELETE_BUTTON_X, self.DELETE_BUTTON_Y, self.DELETE_BUTTON_SIZE, self.click_delete_button, self.draw_delete_button, active=False))
         self.panel_buttons.append(Button(self.COLOR_BUTTON_X, self.COLOR_BUTTON_Y, self.COLOR_BUTTON_SIZE, self.click_color_button, self.draw_color_button, active=False))
 
+    def reset(self) -> None:
+        self.hide = True
+        self.open_button.active()
+        self.close_button.disactive()
+        for button in self.panel_buttons:
+            button.disactive()
+        self.editor.regist_block_area(self.block_editor_open_button_area)
+
     def update(self) -> None:
         self.open_button.update()
         self.close_button.update()
@@ -207,12 +215,7 @@ class Panel:
         self.editor.regist_block_area(self.block_editor_panel_area)
 
     def click_close_button(self):
-        self.hide = True
-        self.open_button.active()
-        self.close_button.disactive()
-        for button in self.panel_buttons:
-            button.disactive()
-        self.editor.regist_block_area(self.block_editor_open_button_area)
+        self.reset()
 
     def click_start_button(self):
         self.app.start()
@@ -322,12 +325,14 @@ class App:
         self.lines = []
         self.finish_lines = []
         self.transformer = None
+        self.panel.reset()
     
     def start(self):
         if self.editor.generatable():
             self.points, self.lines = self.editor.generate()
             self.state = "Translate"
             self.transformer = Transformer(self.lines)
+            self.reset_button.active()
 
     def update(self):
         if self.state == "Edit":
