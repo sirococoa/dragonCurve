@@ -181,6 +181,8 @@ class Panel:
         pyxel.rect(self.CLOSE_BUTTON_X, self.CLOSE_BUTTON_Y, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_SIZE, self.CLOSE_BUTTON_CLOLOR)
 
 class Button:
+    DELAY = 10
+
     def __init__(self, x :int, y :int, size :int, click :Callable[[], None], drawf :Callable[[], None], active :bool=True) -> None:
         self.x = x
         self.y = y
@@ -188,13 +190,17 @@ class Button:
         self.click = click
         self.drawf = drawf
         self._active = active
+        self.delay_clount = 0
 
     def update(self) -> None:
+        if self.delay_clount > 0:
+            self.delay_clount -= 1
         if not self._active:
             return
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT, repeat=10):
+        if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT) and self.delay_clount == 0:
             if 0 <= pyxel.mouse_x - self.x <= self.size and 0 <= pyxel.mouse_y - self.y <= self.size:
                 self.click()
+                self.delay_clount = self.DELAY
 
     def draw(self) -> None:
         if not self._active:
