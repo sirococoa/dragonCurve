@@ -282,6 +282,23 @@ class Button:
     def disactive(self) -> None:
         self._active = False
 
+class ResetButton(Button):
+    MARGIN = 10
+    SIZE = 30
+    X = WINSOW_W - SIZE - MARGIN
+    Y = WINSOW_H - SIZE - MARGIN
+    CLOLOR = 13
+
+    def __init__(self, app :'App') -> None:
+        super().__init__(self.X, self.Y, self.SIZE, self.click, self.drawf)
+        self.app = app
+
+    def click(self):
+        app.reset()
+
+    def drawf(self):
+        pyxel.rect(self.X, self.Y, self.SIZE, self.SIZE, self.CLOLOR)
+
 class App:
     def __init__(self):
         pyxel.init(WINSOW_W, WINSOW_H)
@@ -290,6 +307,8 @@ class App:
         self.editor = Editor()
         self.panel = Panel(self, self.editor)
         self.state = "Edit"
+
+        self.reset_button = ResetButton(self)
 
         self.points = []
         self.lines = []
@@ -317,6 +336,7 @@ class App:
             if pyxel.btnp(pyxel.KEY_SPACE, repeat=60):
                 self.start()
         elif self.state == "Translate":
+            self.reset_button.update()
             if pyxel.btnp(pyxel.KEY_SPACE, repeat=60):
                 new_lines = []
                 for line in self.lines:
@@ -340,6 +360,7 @@ class App:
                     line.draw()
             for point in self.points:
                 point.draw()
+            self.reset_button.draw()
         else:
             pass
 
