@@ -143,6 +143,14 @@ class App:
         self.transformer = None
         pyxel.run(self.update, self.draw)
 
+    def reset(self):
+        self.editor = Editor()
+        self.state = "Edit"
+        self.points = []
+        self.lines = []
+        self.finish_lines = []
+        self.transformer = None
+
     def update(self):
         if self.state == "Edit":
             self.editor.update()
@@ -157,6 +165,8 @@ class App:
                     new_lines.extend(self.transformer.transrate(line))
                 self.lines = [line for line in new_lines if not finish_translate(line)]
                 self.finish_lines.extend([line for line in new_lines if line not in self.lines])
+            if pyxel.btnp(pyxel.KEY_R, repeat=60):
+                self.reset()
         else:
             pass
 
