@@ -161,6 +161,10 @@ class Canvas:
                     self.register_dots(x, y, line.t.color)
 
     def register_dots(self, x :int, y :int, color :int) -> None:
+        if not 0 <= x <= WINDOW_W:
+            return
+        if not 0 <= y <= WINDOW_H:
+            return
         self.dots[(x, y)] = color
     
     def draw(self) -> None:
