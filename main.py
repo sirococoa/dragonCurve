@@ -359,7 +359,9 @@ class App:
                     else:
                         self.lines.append(new_line)
             if len(self.lines) > self.MAX_LINE_NUM:
-                self.lines = random.sample(self.lines, self.MAX_LINE_NUM)
+                sampled_lines = random.sample(self.lines, self.MAX_LINE_NUM)
+                self.finish_lines.extend([line for line in self.lines if line not in sampled_lines])
+                self.lines = sampled_lines
             print(len(self.lines), len(self.line_queue), len(self.finish_lines))
         else:
             pass
