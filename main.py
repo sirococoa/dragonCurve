@@ -159,7 +159,7 @@ class Panel:
         self.close_button.update()
 
     def draw(self):
-        if self.hide:
+        if not self.hide:
             pyxel.rect(self.X, self.Y, self.WIDTH, self.HEIGHT, self.COLOR)
         self.open_button.draw()
         self.close_button.draw()
