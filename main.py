@@ -172,7 +172,7 @@ class Canvas:
             pyxel.pset(pos[0], pos[1], color)
 
 class Editor:
-    MAX_POINT_NUM = 5
+    MAX_POINT_NUM = 10
 
     def __init__(self) -> None:
         self.points = []
