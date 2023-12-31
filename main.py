@@ -1,8 +1,9 @@
 import pyxel
 
 from copy import copy
-from typing import TypeVar, Callable
 import math
+import random
+from typing import TypeVar, Callable
 
 N = TypeVar("N", int, float)
 
@@ -304,6 +305,7 @@ class ResetButton(Button):
         pyxel.rect(self.X, self.Y, self.SIZE, self.SIZE, self.CLOLOR)
 
 class App:
+    MAX_LINE_NUM = 5000
     MAX_PROCESS_NUM_PER_FRAME = 100
 
     def __init__(self):
@@ -356,6 +358,8 @@ class App:
                         self.finish_lines.append(new_line)
                     else:
                         self.lines.append(new_line)
+            if len(self.lines) > self.MAX_LINE_NUM:
+                self.lines = random.sample(self.lines, self.MAX_LINE_NUM)
             print(len(self.lines), len(self.line_queue), len(self.finish_lines))
         else:
             pass
