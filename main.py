@@ -209,6 +209,7 @@ class Button:
 
     def active(self) -> None:
         self._active = True
+        self.delay_clount = self.DELAY
     
     def disactive(self) -> None:
         self._active = False
